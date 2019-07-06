@@ -2,6 +2,7 @@ package chess;
 
 import boardgame.Board;
 import boardgame.Piece;
+import boardgame.Position;
 
 public abstract class ChessPiece extends Piece {
 
@@ -16,7 +17,6 @@ public abstract class ChessPiece extends Piece {
 		return color;
 	}
 
-	
 	/*
 	 * A cor da peça não deve ser alterada, apenas
 	 * acessada.
@@ -24,7 +24,13 @@ public abstract class ChessPiece extends Piece {
 		this.color = color;
 	}
 	*/
-	
+
+	//metodo para ver se tem peça adversaria no caminho pois a movimentação ainda é válida nesse caso (captura)
+	//fica na classe genérica pois todas as peças o usarão
+	protected boolean isThereOpponentPiece(Position position){
+		ChessPiece p = (ChessPiece)getBoard().piece(position);
+		return p != null && p.getColor() != color;
+	}
 	
 	
 }
