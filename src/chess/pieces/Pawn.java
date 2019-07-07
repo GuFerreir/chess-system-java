@@ -68,7 +68,7 @@ public class Pawn extends ChessPiece {
 			//testando duas posições acima (só é possivel no primeiro movimento
 			p.setValues(position.getRow() + 2, position.getColumn());
 			//tambem é preciso ver se a posição entre a origem e a segunda casa esta livre (p2)
-			Position p2 = new Position(position.getRow() - 1, position.getColumn());
+			Position p2 = new Position(position.getRow() + 1, position.getColumn());
 			//se a posição existe, nao tem nada la e se é o movimento 1 (se esta zerado o move count)
 			if(getBoard().positionExists(p) && !getBoard().thereIsAPiece(p) && getBoard().positionExists(p2) && !getBoard().thereIsAPiece(p2) && getMoveCount() == 0){
 				//torna true a posição
