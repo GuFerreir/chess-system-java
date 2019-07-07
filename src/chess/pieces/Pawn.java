@@ -90,10 +90,8 @@ public class Pawn extends ChessPiece {
 				//torna true a posição
 				mat[p.getRow()][p.getColumn()] = true;				
 			}			
-			
 		}		
-		
-		return null;
+		return mat;
 	}
 	
 	
