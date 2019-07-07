@@ -24,6 +24,10 @@ public abstract class ChessPiece extends Piece {
 		this.color = color;
 	}
 	*/
+	
+	public ChessPosition getChessPosition(){
+		return ChessPosition.fromPosition(position);
+	}
 
 	//metodo para ver se tem peça adversaria no caminho pois a movimentação ainda é válida nesse caso (captura)
 	//fica na classe genérica pois todas as peças o usarão
