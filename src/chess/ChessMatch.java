@@ -16,6 +16,7 @@ public class ChessMatch {
 	private Color currentPlayer;
 	private Board board;
 	private boolean check;
+	private boolean checkMate;
 	
 	private List<Piece> piecesOnTheBoard = new ArrayList<>();
 	private List<Piece> capturedPieces = new ArrayList<>();
@@ -37,6 +38,10 @@ public class ChessMatch {
 	
 	public boolean getCheck(){
 		return check;
+	}
+	
+	public boolean getCheckMate(){
+		return checkMate;
 	}
 
 	public ChessPiece[][] getPieces() {
@@ -77,6 +82,11 @@ public class ChessMatch {
 		
 		// testa o check para o oponente do player atual 
 		check = (testCheck(opponent(currentPlayer))) ? true : false;
+		
+		//testar o check mate
+		if (testCheckMate(currentPlayer)){
+			checkMate = true;
+		}		
 		
 		//trocar o turno
 		nextTurn();
@@ -177,6 +187,40 @@ public class ChessMatch {
 		}
 		return false;
 	}
+	
+	//testar se nenhuma peça pode tirar o rei do check
+	private boolean testCheckMate(Color color){
+		//tirar a possibilidade da peça não estar em check
+		if(!testCheck(color)) return false;
+		
+		//testar todas as peças da cor passada e ver se em algum movimento possivel ela tira do check
+		//1 faz uma lista com todas as peças
+		List<Piece> list = piecesOnTheBoard.stream().filter(x -> ((ChessPiece)x).getColor() == color).collect(Collectors.toList());
+		// percorrer peças
+		for(Piece p : list){
+			//matriz de movimentos possiveis
+			boolean[][] mat = p.possibleMoves();
+			//percorrer essa matriz gerada
+			for(int i=0; i<board.getRows(); i++){
+				for (int j=0; j<board.getColumns(); j++){
+					if(mat[i][j]){
+						//testar se essa posição (movimento possivel) tira do check
+						// mover a peça "p" para a possição mat[i][j] (movimento possivel) e testar se esta em check ainda
+						Position source = ((ChessPiece)p).getChessPosition().toPosition();
+						Position target = new Position(i,j);
+						Piece capturedPiece = makeMove(source, target);
+						boolean testCheck = testCheck(color);
+						undoMove(source, target, capturedPiece);
+						if(!testCheck){
+							return false;
+						}
+					}
+				}
+			}
+		}
+		//se esgotar o for significa que não achou movimento possivel que tira do check mate
+		return true;
+	}	
 	
 	private void placeNewPiece(char column, int row, ChessPiece piece){
 		board.placePiece(piece, new ChessPosition(column, row).toPosition());
