@@ -26,6 +26,14 @@ public class ChessMatch {
 		return mat;
 	}
 	
+	//para que quando a peça seja selecionada, apareça pro usuario uma
+	//cor onde a peça pode se movimentar pelo tabuleiro
+	public boolean[][] possibleMoves(ChessPosition sourcePosition){
+		Position position = sourcePosition.toPosition();
+		validateSourcePosition(position);
+		return board.piece(position).possibleMoves();
+	}
+	
 	public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition){
 		//Primeiro converter as posições para posições da matriz
 		Position source = sourcePosition.toPosition();
