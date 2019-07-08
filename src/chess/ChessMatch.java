@@ -114,6 +114,37 @@ public class ChessMatch {
 			piecesOnTheBoard.remove(capturedPiece);
 			capturedPieces.add(capturedPiece);
 		}		
+		
+		// #Special Move - Rook Castling - KingSide
+		//se a peça movida é um rei e moveu duas vezes para direita
+		if(p instanceof King && target.getColumn() == source.getColumn() + 2){
+			//pego a torre
+			Position sourceT = new Position(source.getRow(), source.getColumn() + 3);
+			//defino onde é o destino dela
+			Position targetT = new Position(source.getRow(), source.getColumn() + 1);
+			//retiro a peço da origem (deve ter uma torre la) e retorno a peça que estava la na variavel rook
+			ChessPiece rook = (ChessPiece)board.removePiece(sourceT);
+			//coloco a torre no destino selecionado antes
+			board.placePiece(rook, targetT);
+			//incremento o controle de movimentos da torre, pois movi ela
+			rook.increaseMoveCount();
+		}		
+		
+		// #Special Move - Rook Castling - QueenSide
+		//se a peça movida é um rei e moveu duas vezes para esquerda
+		if(p instanceof King && target.getColumn() == source.getColumn() - 2){
+			//pego a torre
+			Position sourceT = new Position(source.getRow(), source.getColumn() - 4);
+			//defino onde é o destino dela
+			Position targetT = new Position(source.getRow(), source.getColumn() - 1);
+			//retiro a peço da origem (deve ter uma torre la) e retorno a peça que estava la na variavel rook
+			ChessPiece rook = (ChessPiece)board.removePiece(sourceT);
+			//coloco a torre no destino selecionado antes
+			board.placePiece(rook, targetT);
+			//incremento o controle de movimentos da torre, pois movi ela
+			rook.increaseMoveCount();
+		}
+		
 		return capturedPiece;		
 	}
 	
@@ -133,6 +164,38 @@ public class ChessMatch {
 			capturedPieces.remove(capturedPiece);
 			piecesOnTheBoard.add(capturedPiece);
 		}
+		
+		// #Special Move - Rook Castling - KingSide
+		//se a peça movida é um rei e moveu duas vezes para direita
+		if(p instanceof King && target.getColumn() == source.getColumn() + 2){
+			//pego a torre
+			Position sourceT = new Position(source.getRow(), source.getColumn() + 3);
+			//defino onde é o destino dela
+			Position targetT = new Position(source.getRow(), source.getColumn() + 1);
+			//retiro a peço de destino (deve ter uma torre la) e retorno a peça que estava la na variavel rook
+			ChessPiece rook = (ChessPiece)board.removePiece(targetT);
+			//coloco a torre na origem, selecionada antes
+			board.placePiece(rook, sourceT);
+			//decremento o controle de movimentos da torre, pois movi ela
+			rook.decreaseMoveCount();
+		}		
+		
+		// #Special Move - Rook Castling - QueenSide
+		//se a peça movida é um rei e moveu duas vezes para esquerda
+		if(p instanceof King && target.getColumn() == source.getColumn() - 2){
+			//pego a torre
+			Position sourceT = new Position(source.getRow(), source.getColumn() - 4);
+			//defino onde é o destino dela
+			Position targetT = new Position(source.getRow(), source.getColumn() - 1);
+			//retiro a peço do destino e retorno a peça que estava la na variavel rook
+			ChessPiece rook = (ChessPiece)board.removePiece(targetT);
+			//coloco a torre na origem, selecionada antes
+			board.placePiece(rook, sourceT);
+			//decremento o controle de movimentos da torre, pois movi ela
+			rook.decreaseMoveCount();
+		}
+		
+		
 		
 	}
 	
@@ -241,7 +304,7 @@ public class ChessMatch {
         placeNewPiece('b', 1, new Knight(board, Color.WHITE));
         placeNewPiece('c', 1, new Bishop(board, Color.WHITE));
         placeNewPiece('d', 1, new Queen(board, Color.WHITE));
-        placeNewPiece('e', 1, new King(board, Color.WHITE));
+        placeNewPiece('e', 1, new King(board, Color.WHITE, this));
         placeNewPiece('f', 1, new Bishop(board, Color.WHITE));
         placeNewPiece('g', 1, new Knight(board, Color.WHITE));
         placeNewPiece('h', 1, new Rook(board, Color.WHITE));
@@ -258,7 +321,7 @@ public class ChessMatch {
         placeNewPiece('b', 8, new Knight(board, Color.BLACK)); 
         placeNewPiece('c', 8, new Bishop(board, Color.BLACK));
         placeNewPiece('d', 8, new Queen(board, Color.BLACK));
-        placeNewPiece('e', 8, new King(board, Color.BLACK));
+        placeNewPiece('e', 8, new King(board, Color.BLACK, this));
         placeNewPiece('f', 8, new Bishop(board, Color.BLACK));
         placeNewPiece('g', 8, new Knight(board, Color.BLACK));
         placeNewPiece('h', 8, new Rook(board, Color.BLACK));
